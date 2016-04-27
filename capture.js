@@ -22,7 +22,7 @@ const captureImage = () => {
   return new Promise((resolve, reject) => {
     const fileName = `${config.images}/${now}.jpg`
     console.error('Capturing ...')
-    imageSnap.capture(fileName, {cliflags: ''}, (err) => {
+    imageSnap.capture(fileName, {cliflags: '-w 2'}, (err) => {
       if(err) { return reject(err) }
       resolve(Buffer(fs.readFileSync(fileName)).toString('base64'))
     })
