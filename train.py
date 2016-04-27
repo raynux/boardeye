@@ -47,7 +47,7 @@ model.compile(loss='binary_crossentropy',
 #
 if(os.path.exists(WEIGHT_FILE)):
     model.load_weights(WEIGHT_FILE)
-model.fit(x, y, nb_epoch=EPOCH_COUNT, verbose=1, batch_size=32)
+model.fit(x, y, nb_epoch=EPOCH_COUNT, verbose=1)
 
 score = model.evaluate(x, y, verbose=1)
 print('Test score:', score[0])
