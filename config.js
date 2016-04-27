@@ -1,4 +1,6 @@
 module.exports = {
   images: './images',
-  results: './results'
+  results: './results',
+  width: 1280,
+  height: 720
 }
