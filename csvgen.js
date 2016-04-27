@@ -96,17 +96,18 @@ const inputDir = argv.f ? config.falseResults : config.trueResults
 glob(`${inputDir}/*.json`, (err, fileNames) => {
   if(err){ return console.error(err) }
 
-  const flatData = _.map(fileNames, (fileName) => {
-    const data = _.at(JSON.parse(fs.readFileSync(fileName)), 'responses[0].faceAnnotations[0]')[0]
-    if(!data) { return }
-    return recordGen(data)
-  })
+  const flatData = _(fileNames)
+    .map((fileName) => {
+      const data = _.at(JSON.parse(fs.readFileSync(fileName)), 'responses[0].faceAnnotations[0]')[0]
+      if(!data) { return }
+      return recordGen(data)
+    })
+    .filter((rec) => { return !_.values(rec).includes(undefined) })
+    .filter((rec) => { return !_.values(rec).includes(null) })
+    .filter((rec) => { return !_.values(rec).includes(NaN) })
+    .value()
 
-  const cleanData = _.filter(flatData, (rec) => {
-    return !_.values(rec).includes(undefined)
-  })
-
-  json2csv({data: cleanData, fields: Object.keys(flatData[0])}, (err, csv) => {
+  json2csv({data: flatData, fields: Object.keys(flatData[0])}, (err, csv) => {
     if(err) { return console.error(err) }
     console.log(csv)
   })
