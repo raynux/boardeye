@@ -11,3 +11,6 @@ npm-debug.log
 data/images/*
 data/0/*
 data/1/*
+data/csv/*
+data/model.json
+data/weight.hdfs
