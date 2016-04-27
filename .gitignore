@@ -1,0 +1,12 @@
+.DS_Store
+logs
+*.log
+pids
+*.pid
+*.seed
+node_modules
+npm-debug.log
+.remote-sync.json
+.envrc
+images/*
+results/*

@@ -1,0 +1,16 @@
+{
+  "name": "boardeye",
+  "version": "1.0.0",
+  "description": "",
+  "main": "capture.js",
+  "scripts": {},
+  "author": "Ray Sakai",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.10.0",
+    "glob": "^7.0.3",
+    "imagesnapjs": "0.0.7",
+    "json2csv": "^3.3.0",
+    "lodash": "^4.11.1"
+  }
+}
