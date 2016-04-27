@@ -102,7 +102,11 @@ glob(`${inputDir}/*.json`, (err, fileNames) => {
     return recordGen(data)
   })
 
-  json2csv({data: flatData, fields: Object.keys(flatData[0])}, (err, csv) => {
+  const cleanData = _.filter(flatData, (rec) => {
+    return !_.values(rec).includes(undefined)
+  })
+
+  json2csv({data: cleanData, fields: Object.keys(flatData[0])}, (err, csv) => {
     if(err) { return console.error(err) }
     console.log(csv)
   })
