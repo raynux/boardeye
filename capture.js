@@ -49,7 +49,6 @@ captureImage()
   })
 })
 .then((res) => {
-  console.log(JSON.stringify(res.data, null, 2))
   const saveFileDir = argv.f ? config.falseResults : config.trueResults
   fs.writeFile(`${saveFileDir}/${now}.json`, JSON.stringify(res.data, null, 2))
 })
