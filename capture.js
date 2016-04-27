@@ -5,6 +5,14 @@ const fs = require('fs')
 const axios = require('axios')
 const imageSnap = require('imagesnapjs')
 
+const argv = require('yargs')
+        .usage('Usage: $0 [-t or -f]')
+        .example('$0', 'capture "true" image')
+        .example('$0 -f', 'capture "false" image')
+        .boolean('f')
+        .alias('f', 'false')
+        .argv
+
 const config = require('./config')
 
 const VISION_API_ENDPOINT = 'https://vision.googleapis.com/v1/images:annotate'
@@ -42,7 +50,8 @@ captureImage()
 })
 .then((res) => {
   console.log(JSON.stringify(res.data, null, 2))
-  fs.writeFile(`${config.results}/${now}.json`, JSON.stringify(res.data, null, 2))
+  const saveFileDir = argv.f ? config.falseResults : config.trueResults
+  fs.writeFile(`${saveFileDir}/${now}.json`, JSON.stringify(res.data, null, 2))
 })
 .catch((err) => {
   console.error(JSON.stringify(err, null, 2))

@@ -8,5 +8,6 @@ node_modules
 npm-debug.log
 .remote-sync.json
 .envrc
-images/*
-results/*
+data/images/*
+data/0/*
+data/1/*
