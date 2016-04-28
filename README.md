@@ -53,7 +53,7 @@ After generating a bunch of data, it's time to train a brain
 python train.py
 ```
 
-It defaults to 5000 epoch. Generated model and weights are automatically saved. If you need to train more, just run it again.
+It defaults to 5000 epoch. Generated model and weights are automatically saved. If you would like to train more, just run it again.
 
 ## Prediction
 All set. Let's test it out!
