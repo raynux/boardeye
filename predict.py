@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 import sys
-import os.path
-import pandas as pd
 import numpy as np
-from keras.models import Sequential
-from keras.layers.core import Dense
 from keras.models import model_from_json
 
 MODEL_FILE = './data/model.json'
