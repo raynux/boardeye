@@ -22,7 +22,7 @@ export GOOGLE_API_KEY=XXXXXX
 If you would like to try prediction now, download a trained [model](https://drive.google.com/open?id=0B9nFZuxm88eRb1F4ZUtJQTZKcDQ) and place them under `data`. Then go `Prediction` section below.
 
 ## Generating Training Data
-You're gonna need two kinds of pictures - looking at your display or not.
+You need two kinds of pictures - looking at your display or not.
 
 So, to collect **looking**(=1) data, run
 ```sh
@@ -34,9 +34,9 @@ To collect **not looking**(=0) data, also run
 node capture.js -d data/0
 ```
 
-Repeat these as much as you can. More data, better always. So, I've done like
+Repeat above as many times as you can. More data, always better. So, I've done like
 ```sh
-for i in {1..20}; do
+for i in {1..10}; do
   echo progress $i
   say "$i"
   ./capture.js -d data/1
