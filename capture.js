@@ -4,16 +4,19 @@ const _ = require('lodash')
 const fs = require('fs')
 const axios = require('axios')
 const imageSnap = require('imagesnapjs')
+const json2csv = require('json2csv')
+const flatAnnotation = require('./lib/flat_annotation')
 
 const argv = require('yargs')
         .usage('Usage: $0 [-d directory]')
+        .example('$0', 'capture an image then classify')
         .example('$0 -d DIR', 'capture an image then store result in DIR')
         .option('d', {
           alias : 'directory',
           describe: 'Directory to store Vision API result',
           type: 'string',
           nargs: 1,
-          demand: true,
+          demand: false,
           requiresArg: true
         })
         .help('help')
@@ -30,7 +33,7 @@ const captureImage = () => {
     console.error('Capturing ...')
     imageSnap.capture(fileName, {cliflags: '-w 2'}, (err) => {
       if(err) { return reject(err) }
-      console.log(`Saving the image as ${fileName}`)
+      if(!argv.d) { console.log(`Saving the image as ${fileName}`) }
       resolve(Buffer(fs.readFileSync(fileName)).toString('base64'))
     })
   })
@@ -56,10 +59,26 @@ captureImage()
   })
 })
 .then((res) => {
-  const fileName = `${argv.d}/${now}.json`
-  fs.writeFileSync(fileName, JSON.stringify(res.data, null, 2))
-  console.log(`Saving the result as ${fileName}`)
+  // store mode
+  if(argv.d) {
+    const fileName = `${argv.d}/${now}.json`
+    fs.writeFileSync(fileName, JSON.stringify(res.data, null, 2))
+    console.log(`Saving the result as ${fileName}`)
+    return
+  }
+
+  // console ouput mode
+  fs.unlinkSync(`${config.images}/${now}.jpg`)
+
+  const faceAnnotation = _.at(res.data, 'responses[0].faceAnnotations[0]')[0]
+  const flatData = flatAnnotation(faceAnnotation)
+  json2csv({data: [flatData],
+            fields: Object.keys(flatData),
+            hasCSVColumnTitle: false}, (err, csv) => {
+    if(err) { return console.error(err) }
+    console.log(csv)
+  })
 })
 .catch((err) => {
-  console.error(JSON.stringify(err, null, 2))
+  console.error(err)
 })
