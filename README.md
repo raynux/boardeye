@@ -63,7 +63,7 @@ node capture.js
 
 Then copy the output, then
 ```sh
-python predict COPIED_TEXT
+python predict.py COPIED_TEXT
 ```
 
 Now you should see 0 or 1. Did it work? :)
