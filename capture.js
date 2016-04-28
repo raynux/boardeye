@@ -6,11 +6,17 @@ const axios = require('axios')
 const imageSnap = require('imagesnapjs')
 
 const argv = require('yargs')
-        .usage('Usage: $0 [-t or -f]')
-        .example('$0', 'capture "true" image')
-        .example('$0 -f', 'capture "false" image')
-        .boolean('f')
-        .alias('f', 'false')
+        .usage('Usage: $0 [-d directory]')
+        .example('$0 -d DIR', 'capture an image then store result in DIR')
+        .option('d', {
+          alias : 'directory',
+          describe: 'Directory to store Vision API result',
+          type: 'string',
+          nargs: 1,
+          demand: true,
+          requiresArg: true
+        })
+        .help('help')
         .argv
 
 const config = require('./config')
@@ -24,6 +30,7 @@ const captureImage = () => {
     console.error('Capturing ...')
     imageSnap.capture(fileName, {cliflags: '-w 2'}, (err) => {
       if(err) { return reject(err) }
+      console.log(`Saving the image as ${fileName}`)
       resolve(Buffer(fs.readFileSync(fileName)).toString('base64'))
     })
   })
@@ -49,8 +56,9 @@ captureImage()
   })
 })
 .then((res) => {
-  const saveFileDir = argv.f ? config.falseResults : config.trueResults
-  fs.writeFile(`${saveFileDir}/${now}.json`, JSON.stringify(res.data, null, 2))
+  const fileName = `${argv.d}/${now}.json`
+  fs.writeFileSync(fileName, JSON.stringify(res.data, null, 2))
+  console.log(`Saving the result as ${fileName}`)
 })
 .catch((err) => {
   console.error(JSON.stringify(err, null, 2))
