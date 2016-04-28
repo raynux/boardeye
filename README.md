@@ -1,13 +1,16 @@
 # BoardEye
-line of sight detector using deep learning technology
+Line of sight detector using deep learning technology
 
 ## Motivation
 Just wanted to use Keras and Vision API :)
 
-## What does it does?
+## What does it do?
 - Capture your face by a webcam (tested only on Mac), and classify it by Google Vision API
 - Train a neural network based on results from Vision API
 - Predict input from a webcam
+
+At the end, your neural network should be able to classify whether you are looking at the display or now.
+
 
 ## Setup
 Assuming that you already have NodeJS and Keras working.
