@@ -47,7 +47,7 @@ captureImage()
   }
 })
 .then((requestBody) => {
-  console.error('Calling Vision API ...')
+  console.log('Calling Vision API ...')
   return axios({
     method: 'post',
     url: VISION_API_ENDPOINT,
