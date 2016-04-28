@@ -1,21 +1,22 @@
 #!/usr/bin/env python
-from keras.models import Sequential
-from keras.layers.core import Dense
 import os.path
 import pandas as pd
 import numpy as np
+import random
+from keras.models import Sequential
+from keras.layers.core import Dense
 
 MODEL_FILE = './data/model.json'
 WEIGHT_FILE = './data/weight.hdfs'
 
-INPUT_DIM = 53
-EPOCH_COUNT = 1000
+EPOCH_COUNT = 5000
 
 #
 # Preparing data
 #
 x = []
 y = []
+z = pd.read_csv('./data/csv/0.csv').values
 
 for rec in pd.read_csv('./data/csv/0.csv').values:
     x.append(rec)
@@ -25,15 +26,15 @@ for rec in pd.read_csv('./data/csv/1.csv').values:
     x.append(rec)
     y.append(1)
 
-x = np.array(x, dtype='float')
-y = np.array(y, dtype='float')
+x = np.array(x, dtype=np.float32)
+y = np.array(y, dtype=np.int8)
 
 
 #
 # Model construction
 #
 model = Sequential([
-    Dense(32, input_dim=INPUT_DIM, activation='relu'),
+    Dense(x.shape[1], input_dim=x.shape[1], activation='relu'),
     Dense(16, activation='relu'),
     Dense(1, activation='sigmoid')
 ])
