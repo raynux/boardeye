@@ -19,6 +19,8 @@ npm install
 export GOOGLE_API_KEY=XXXXXX
 ```
 
+If you would like to try prediction now, download a trained [model](https://drive.google.com/open?id=0B9nFZuxm88eRb1F4ZUtJQTZKcDQ) and place them under `data`. Then go `Prediction` section below.
+
 ## Generating Training Data
 You're gonna need two kinds of pictures - looking at your display or not.
 
