@@ -11,7 +11,6 @@ Just wanted to use Keras and Vision API :)
 
 At the end, your neural network should be able to classify whether you are looking at the display or now.
 
-
 ## Setup
 Assuming that you already have NodeJS and Keras working.
 
