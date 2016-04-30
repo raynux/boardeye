@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import json
 import numpy as np
 from keras.models import model_from_json
 
@@ -24,4 +25,14 @@ model.compile(loss='binary_crossentropy',
 #
 # Prediction
 #
-print model.predict_classes(x, batch_size=32, verbose=0)
+
+y = model.predict_classes(x, verbose=0)
+
+# convert to List and then flatten
+y = sum(y.tolist(), [])
+
+result = {
+    "prediction": y
+}
+
+print json.dumps(result)

@@ -1,5 +1,6 @@
 'use strict'
 const _           = require('lodash')
+const fs          = require('fs')
 const exec        = require('child-process-promise').exec
 const express     = require('express')
 const morgan      = require('morgan')
@@ -9,8 +10,8 @@ const axios       = require('axios')
 const json2csv    = require('json2csv')
 
 const flatAnnotation = require('../lib/flat_annotation')
+const visionRequest = require('../lib/vision_request')
 
-const VISION_API_ENDPOINT = 'https://vision.googleapis.com/v1/images:annotate'
 
 if(!process.env.GOOGLE_API_KEY) {
   console.error('GOOGLE_API_KEY must be defined as an env value')
@@ -35,24 +36,29 @@ const json2csvPromise = (param) => {
 }
 
 // Route
+app.post('/api/learn', (req, res) => {
+  if(!_.includes([0, 1], req.body.feedType)) {
+    return res.status(500).json({message: 'bad feedType'})
+  }
+
+  visionRequest(req.body.base64Image)
+  .then((result) => {
+    const fileName = `data/${req.body.feedType}/${Date.now()}.json`
+    fs.writeFileSync(fileName, JSON.stringify(result.data, null, 2))
+    console.log(`wrote to ${fileName}`)
+    res.json({message: 'ok', fileName})
+  })
+  .catch((err) => {
+    console.error(err)
+    res.status(500).json({message: err})
+  })
+})
+
 app.post('/api/classify', (req, res) => {
   let visionResult = null
   let feedCSV = null
 
-  axios({
-    method: 'post',
-    url: VISION_API_ENDPOINT,
-    params: {key: process.env.GOOGLE_API_KEY},
-    data: {
-      requests: {
-        image: {content: req.body.base64Image},
-        features: [{
-          type: 'FACE_DETECTION',
-          maxResults: 10
-        }]
-      }
-    }
-  })
+  visionRequest(req.body.base64Image)
   .then((result) => {
     visionResult = result.data
     const faceAnnotation = _.at(visionResult, 'responses[0].faceAnnotations[0]')[0]
@@ -69,11 +75,12 @@ app.post('/api/classify', (req, res) => {
   })
   .then((result) => {
     if(result.error) { return Promise.reject(result.error) }
+    const output = JSON.parse(result.stdout)
 
     res.json({
       visionResult,
       feedCSV,
-      prediction: _.flatten(JSON.parse(result.stdout))
+      prediction: output.prediction
     })
   })
   .catch((err) => {
