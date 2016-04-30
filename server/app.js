@@ -1,7 +1,7 @@
 'use strict'
-const _ = require('lodash')
-const express = require('express')
-const morgan = require('morgan')
+const _          = require('lodash')
+const express    = require('express')
+const morgan     = require('morgan')
 const bodyParser = require('body-parser')
 
 const app = express()

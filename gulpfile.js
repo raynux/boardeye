@@ -1,8 +1,8 @@
 'use strict'
-const gulp          = require('gulp')
-const nodemon       = require('gulp-nodemon')
-const plumber       = require('gulp-plumber')
-const webpack       = require('webpack-stream')
+const gulp    = require('gulp')
+const nodemon = require('gulp-nodemon')
+const plumber = require('gulp-plumber')
+const webpack = require('webpack-stream')
 
 gulp.task('default', ['server', 'webpack'])
 

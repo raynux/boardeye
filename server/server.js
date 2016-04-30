@@ -1,23 +1,21 @@
 'use strict'
-const _ = require('lodash')
-const cluster = require('cluster')
-const numCPUs = require('os').cpus().length
+const _    = require('lodash')
 const http = require('http')
 const port = process.env.PORT || '3000'
 const argv = require('yargs')
-        .usage('Usage: $0 [-c]')
-        .example('$0', 'run server as a single process')
-        .example('$0 -c', 'run server as a cluster mode')
-        .option('c', {
-          alias : 'cluster',
-          describe: 'cluster mode',
-          type: 'boolean',
-          nargs: 0,
-          demand: false,
-          requiresArg: false
-        })
-        .help('help')
-        .argv
+  .usage('Usage: $0 [-c]')
+  .example('$0', 'run server as a single process')
+  .example('$0 -c', 'run server as a cluster mode')
+  .option('c', {
+    alias : 'cluster',
+    describe: 'cluster mode',
+    type: 'boolean',
+    nargs: 0,
+    demand: false,
+    requiresArg: false
+  })
+  .help('help')
+  .argv
 
 const runner = () => {
   const app = require('./app')
@@ -49,6 +47,8 @@ const runner = () => {
 
 // Cluster mode or not
 if(argv.c) {
+  const cluster = require('cluster')
+  const numCPUs = require('os').cpus().length
   cluster.isMaster ? _.times(numCPUs, cluster.fork) : runner()
 }
 else {
