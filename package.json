@@ -3,15 +3,31 @@
   "version": "1.0.0",
   "description": "",
   "main": "capture.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node ./server/server.js -c"
+  },
   "author": "Ray Sakai",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.10.0",
+    "axios": "^0.11.0",
+    "babel-core": "^6.7.7",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
     "glob": "^7.0.3",
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
     "imagesnapjs": "0.0.7",
     "json2csv": "^3.3.0",
     "lodash": "^4.11.1",
+    "morgan": "^1.7.0",
+    "react": "^15.0.1",
     "yargs": "^4.6.0"
+  },
+  "devDependencies": {
+    "gulp-nodemon": "^2.0.6",
+    "webpack-stream": "^3.2.0"
   }
 }

@@ -8,6 +8,8 @@ node_modules
 npm-debug.log
 .remote-sync.json
 .envrc
+public/bundle.js
+public/bundle.js.map
 data/images/*
 data/0/*
 data/1/*
