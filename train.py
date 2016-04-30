@@ -5,6 +5,7 @@ import numpy as np
 import random
 from keras.models import Sequential
 from keras.layers.core import Dense
+from keras.callbacks import EarlyStopping
 
 MODEL_FILE = './data/model.json'
 WEIGHT_FILE = './data/weight.hdfs'

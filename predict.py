@@ -24,4 +24,4 @@ model.compile(loss='binary_crossentropy',
 #
 # Prediction
 #
-print model.predict_classes(x, batch_size=32, verbose=1)
+print model.predict_classes(x, batch_size=32, verbose=0)
