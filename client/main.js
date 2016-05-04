@@ -3,28 +3,35 @@ import _ from 'lodash'
 import axios from 'axios'
 import React from 'react'
 import {render} from 'react-dom'
-import Webcam from 'react-webcam'
+import EventEmitterMixin from 'react-event-emitter-mixin'
+
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
 import Header from './components/Header'
+import WebcamView from './components/WebcamView'
 
 const style = {
   feedCSV: {
     wordWrap: 'break-word'
-  },
-  actualWebcamWrap: {
-    visibility: 'hidden',
-    height: 0
-  },
-  controlButton: {
-    marginRight: 4
   }
 }
 
 const App = React.createClass({
+  mixins: [EventEmitterMixin],
+
   getInitialState() {
     return {apiResult: {}}
+  },
+
+  componentWillMount() {
+    this.eventEmitter('on', 'beginClassify', () => {
+      this.setState({apiResult: {}})  // clear
+    })
+
+    this.eventEmitter('on', 'doneClassify', (result) => {
+      this.setState({apiResult: result})
+    })
   },
 
   render() {
@@ -34,21 +41,7 @@ const App = React.createClass({
       <div className='container'>
         <div className="row">
           <div className='column column-40'>
-            <div>
-              <Webcam audio={false} width={400} height={300} />
-              <div style={style.actualWebcamWrap}>
-                <Webcam ref='webcam' audio={false} width={1280} height={720} />
-              </div>
-            </div>
-            <div>
-              <button style={style.controlButton} className='button' onClick={this.classify}>Predict</button>
-              <button style={style.controlButton}
-                      className='button button-outline'
-                      onClick={() => {this.learn(1)}}>Learn True</button>
-              <button style={style.controlButton}
-                      className='button button-outline'
-                      onClick={() => {this.learn(0)}}>Learn False</button>
-            </div>
+            <WebcamView width={400} height={300} />
 
             Prediction : <code>{this.state.apiResult.prediction}</code>
           </div>
@@ -67,26 +60,7 @@ const App = React.createClass({
         <pre><code>{JSON.stringify(this.state.apiResult.visionResult, null, 2)}</code></pre>
       </div>
     </div>
-  },
-
-  classify() {
-    this.setState({apiResult: {}})  // clear
-
-    const base64Image = this.refs.webcam.getScreenshot().split(',')[1]
-    axios.post('/api/classify', {base64Image}).then((res) => {
-      console.debug(res.data.prediction)
-      this.setState({apiResult: res.data})
-    })
-    .catch(console.error)
-  },
-
-  learn(feedType) {
-    const base64Image = this.refs.webcam.getScreenshot().split(',')[1]
-    axios.post('/api/learn', {feedType, base64Image}).then((res) => {
-      console.debug(res.data)
-    })
-    .catch(console.error)
   }
 })
 
-render(<App/>, document.getElementById('contents'))
+render(<App />, document.getElementById('contents'))
